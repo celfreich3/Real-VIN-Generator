@@ -1,21 +1,59 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<nav class="navbar navbar-dark" style="text-align:left">
+  <h1 class="navTitle">Real VIN Generator</h1>
+</nav>
+<div class="content">
+  <div class="generation">
+    <p class="titleLabel">Existing Vehicle Specifications</p>
+    <div class=generationFlex>
+      <div class="makeRow">
+        <p class="makeLabel">Make:</p>
+        <select class="browser-default custom-select makeSelect" (ngModelChange)="GetModels($event)" [(ngModel)]="selectedMake" >
+          <option value="unspecified">Unspecified</option>
+          <option *ngFor="let smake of possibleMakes" value="{{smake}}">{{smake}}</option>
+        </select>
+      </div>
+      <div class="modelRow">
+        <p class="modelLabel">Model:</p>
+        <select class="browser-default custom-select modelSelect" (ngModelChange)="GetYears($event)" [(ngModel)]="selectedModel" >
+            <option value="unspecified">Unspecified</option>
+            <option *ngFor="let smodel of possibleModels" value="{{smodel}}">{{smodel}}</option>
+        </select>
+      </div>
+      <div class="yearRow">
+        <p class="yearLabel">Year:</p>
+        <select class="browser-default custom-select yearSelect" [(ngModel)]="selectedYear">
+            <option value="-1">Unspecified</option>
+            <option *ngFor="let syear of possibleYears" value="{{syear}}">{{syear}}</option>
+        </select>
+      </div>
+      <div class="buttonsRow">
+        <button class="btn btn-primary"  (click)="RandomVIN()">Generate Random VIN</button>
+        <button class="btn btn-primary" (click)="ExistingVIN()">Generate Existing VIN</button>
+        <button class="btn btn-primary" (click)="ClearInput()">Clear Selections</button>
+      </div>
+    </div>
+  </div>
+  <hr class="separator">
+  <div class="results">
+    <ul class="nav nav-tabs nav-fill">
+        <li class="nav-item">
+          <a class="nav-link active" href="javascript:void(0);" *ngIf="qrEnabled" id="QRTab">QR Code</a>
+          <a class="nav-link" href="javascript:void(0);" *ngIf="!qrEnabled" (click)="qrEnabled = true" id="QRTab">QR Code</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="javascript:void(0);" *ngIf="!qrEnabled" id="BarTab">Barcode</a>
+          <a class="nav-link" href="javascript:void(0);" *ngIf="qrEnabled" (click)="qrEnabled = false" id="BarTab">Barcode</a>
+        </li>
+      </ul>
+      <div class="resultContent">
+        <ngx-qrcode *ngIf="qrEnabled" class="qrcode" [qrc-element-type]="qrElementType" [qrc-value] = "VIN" qrc-errorCorrectionLevel = "H"></ngx-qrcode>
+        <ngx-barcode *ngIf="!qrEnabled" class="barcode" [bc-margin]="0" [bc-element-type]="barcodeElementType" [bc-width]="1.5" [bc-format]="barcodeFormat" [bc-value]="VIN" [bc-display-value]="false"  ></ngx-barcode>
+        <p class="VIN">{{VIN}}</p>
+        <p class="YMM">{{Year}} {{Make}} {{Model}}</p>
+      </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+
 
 <router-outlet></router-outlet>
