@@ -1,11 +1,19 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <nav class="navbar navbar-dark" style="text-align:left">
   <h1 class="navTitle">Real VIN Generator</h1>
 </nav>
 <div class="content">
   <div class="generation">
-    <p class="titleLabel">Existing Vehicle Specifications</p>
-    <div class=generationFlex>
+    <ul class="nav nav-tabs nav-fill">
+      <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0);" *ngIf="DBGenEnabled" id="DBGenTab">Database Generation</a>
+        <a class="nav-link" href="javascript:void(0);" *ngIf="!DBGenEnabled" (click)="DBGenEnabled = true" id="DBGenTab">Database Generation</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0);" *ngIf="!DBGenEnabled" id="ManualTab">Manual Generation</a>
+        <a class="nav-link" href="javascript:void(0);" *ngIf="DBGenEnabled" (click)="DBGenEnabled = false" id="ManualTab">Manual Generation</a>
+      </li>
+    </ul>
+    <div *ngIf="DBGenEnabled" class=DBGen>
       <div class="makeRow">
         <p class="makeLabel">Make:</p>
         <select class="browser-default custom-select makeSelect" (ngModelChange)="GetModels($event)" [(ngModel)]="selectedMake" >
@@ -33,8 +41,15 @@
         <button class="btn btn-primary" (click)="ClearInput()">Clear Selections</button>
       </div>
     </div>
+    <div *ngIf="!DBGenEnabled" class=manualGen>
+        <p class="manualLabel">Barcode Value: </p>
+        <input class="form-control" [(ngModel)]="manualEntry" placeholder="Enter VIN">
+        <div class="buttonsRow">
+            <button class="btn btn-primary"  (click)="VerifyVIN()">Verify</button>
+            <button class="btn btn-primary" (click)="ManualVIN()">Generate</button>
+        </div>
+    </div>
   </div>
-  <hr class="separator">
   <div class="results">
     <ul class="nav nav-tabs nav-fill">
         <li class="nav-item">
